@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- input sim -->
+  <node pkg="tf_sim" type="step_sim_node.py" name="step_sim" respawn="true" output="screen">
+    <param name="~magnitude" type="int" value="30" />
+  </node>
+
+  <!-- system sim -->
+  <node pkg="tf_sim" type="system_sim_node.py" name="system_sim" respawn="true" output="screen">
+    <remap from="~input" to="/input_val"/>
+  </node>
+
+  <node pkg="rqt_plot" type="rqt_plot" name="plot" args="/output_val_1 /output_val_2 /input_val"/>
+
+</launch>
