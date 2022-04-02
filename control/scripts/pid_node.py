@@ -11,6 +11,7 @@ error_acum = 0.0
 error_anterior = 0.0
 
 def exec_pid(error):
+  # Les variables globals que s'usaran en la funcio
   global T
   global Kp
   global Kd
@@ -19,21 +20,29 @@ def exec_pid(error):
   global error_acum
   global error_anterior
 
-  #TODO calcula la sortida del PID fent servir els parametres Kp, Kd, Ki i max_integ_error
+  
+  # Es suma l'error acumulat
   error_acum = error_acum+error
-  output_i = Ki*error_acum
 
-  if(output_i>max_integ_error):
-    output_i = max_integ_error
-  elif(output_i<-max_integ_error):
-    output_i = -max_integ_error
+  # Si aquest error acumulat es major al maxim valor que pot prendre la integral de la part I 
+  # s'ajusta aquest error acumulat a dita fita
+  if(error_acum>max_integ_error):
+    error_acum = max_integ_error
+  elif(error_acum<-max_integ_error):
+    error_acum = -max_integ_error
 
-  output = Kp*error+Kd*((error-error_anterior)/T)+output_i
+ # Es calcula la sortida del PID fent servir els parametres Kp, Kd, Ki i max_integ_error
+  # u(k) = Kp*e(k)+Kd*[(e(k)-e(k-1)/T]+Ki*part integral (error_acum)
+  output = Kp*error+Kd*((error-error_anterior)/T)+Ki*error_acum
+
+  # L'output es dona com el percentatge de gas que ha de fer el cotxe, per tant el valor resultant s'ajusta entre 0 i 100
   if(output>100.0):
     output=100.0
-  elif(output<0):
+  elif(output<0.0):
     output=0.0
 
+  # Es guarda l'error actual en la variable 'error_anterior' per la seguent iteracio
+  # e(k-1) = e(k)
   error_anterior = error
   return output
 
