@@ -4,8 +4,9 @@
 import rospy
 from tf_sim.msg import Float32Stamped
 
+# S'inicialitzen les variables globals
 global k1
-k1 = 30.0
+k1 = 30.0           # Grup 4 -> K=30
 global y_k_1
 y_k_1 = 0.0
 global y_k_2
@@ -16,7 +17,7 @@ global x_k_2
 x_k_2 = 0.0
 
 global k2
-k2 = 30.0
+k2 = 30.0           # Grup 4 -> K=30
 global f_k_1
 f_k_1 = 0.0
 global f_k_2
