@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="frequency" value="10" />
+
+  <!-- step sim -->
+  <node pkg="tf_sim" type="step_sim_node.py" name="step_sim" respawn="true" output="screen">
+    <param name="~magnitude" type="int" value="30" />
+    <param name="~frequency" type="int" value="$(arg frequency)" />
+  </node>
+
+  <!-- control sim -->
+  <node pkg="control" type="pid_node.py" name="pid" respawn="true" output="screen">
+
+    <remap from="~odom_msg" to="/odom"/>
+    <remap from="~po" to="/position"/>
+
+    <remap from="~velocity" to="/mobile_base/commands/velocity"/>
+    
+
+    <param name="~frequency" type="int" value="$(arg frequency)" />
+    <param name="~Kp" type="double" value="0.0" />
+    <param name="~Kd" type="double" value="0.0" />
+    <param name="~Ki" type="double" value="0.0" />
+    <param name="~max_integ_term" type="double" value="0.0" />
+  </node>
+
+
+  <!-- plant sim -->
+  <node pkg="tf_sim" type="plant_sim_node.py" name="plant_sim" respawn="true" output="screen">
+
+    <remap from="~input" to="/pid/output"/>
+    
+    <param name="~frequency" type="double" value="$(arg frequency)" />
+    <param name="~b" type="double" value="90" />
+    <param name="~M" type="double" value="1200" />
+  </node>
+
+  <!-- rqt_plot -->
+  <node pkg="rqt_plot" type="rqt_plot" name="rqt_plot" args="/pid/output /input_val /plant_sim/output"/>
+
+</launch>
