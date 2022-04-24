@@ -3,32 +3,31 @@
 
   <arg name="frequency" value="10" />
 
-  <!-- control sim -->
+  <!-- pid_node -->
   <node pkg="control" type="pid_node.py" name="pid" respawn="true" output="screen">
 
+    <!-- Missatge Odometria de Kobuki a pid_node-->
     <remap from="~odom_msg" to="/odom"/>
+    <!-- Missatge Punt Objectiu de Publisher a pid_node-->
     <remap from="~po" to="/position"/>
 
+    <!-- Missatge velocitat de pid_node a Kobuki-->
     <remap from="~velocity" to="/mobile_base/commands/velocity"/>
     
-    <!-- kx per cada pid-->
+    <!-- Constant Kp, Kd i Ki per cada PID-->
+       <!-- Constants K per PID lineal-->
     <param name="~frequency" type="int" value="$(arg frequency)" />
     <param name="~Kp_lineal" type="double" value="0.5" />
-    <param name="~Kd_lineal" type="double" value="0.0" />
-    <param name="~Ki_lineal" type="double" value="0.0" />
-    <param name="~max_integ_term_lineal" type="double" value="0.0" />
+    <param name="~Kd_lineal" type="double" value="0.7" />
+    <param name="~Ki_lineal" type="double" value="0.7" />
+    <param name="~max_integ_term_lineal" type="double" value="1.0" />
     
-    <param name="~Kp_angular" type="double" value="1" />
-    <param name="~Kd_angular" type="double" value="0.3" />
+       <!-- Constants K per PID angular-->
+    <param name="~Kp_angular" type="double" value="1.0" />
+    <param name="~Kd_angular" type="double" value="0.9" />
     <param name="~Ki_angular" type="double" value="0.7" />
     <param name="~max_integ_term_angular" type="double" value="1.0" />
-    
-    <remap from="~vel" to="/mobile_base/commands/velocity"/>
   </node>
-
-
-
-   
 
 
   <!-- rqt_plot -->
